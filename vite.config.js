@@ -7,7 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        overlay: 'public/overlay.html',
+        overlay: 'overlay.html',
       },
     },
   },
