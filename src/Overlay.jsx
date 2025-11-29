@@ -1,5 +1,4 @@
-// src/Overlay.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
@@ -8,54 +7,57 @@ export default function Overlay({ roomId }) {
 
   useEffect(() => {
     if (!roomId) return;
-    const ref = doc(db, "rooms", roomId);
-    const unsub = onSnapshot(ref, (snap) => {
-      if (snap.exists()) setRoom(snap.data());
-      else setRoom(null);
+
+    const unsub = onSnapshot(doc(db, "rooms", roomId), (snap) => {
+      setRoom(snap.data());
     });
+
     return () => unsub();
   }, [roomId]);
 
-  if (!roomId) {
-    return (
-      <div style={{ color: "white", textAlign: "center", padding: 20 }}>
-        Keine room-ID in der URL. Beispiel: <code>?room=DEINE_ID</code>
-      </div>
-    );
-  }
+  if (!room) return null;
 
-  if (!room) {
-    return (
-      <div style={{ color: "white", textAlign: "center", padding: 20 }}>
-        Lade Raumdaten...
-      </div>
-    );
-  }
-
-  const item = room.currentItem;
+  const currentItem = room.currentItem;
+  const players = room.players || [];
 
   return (
     <div
       style={{
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        pointerEvents: "none",
+        color: "white",
+        fontFamily: "Arial",
+        fontSize: "32px",
+        padding: "20px",
       }}
     >
+      {/* Item Anzeige */}
       <div
         style={{
-          color: "white",
-          fontSize: 48,
-          fontWeight: 800,
-          textShadow: "0 4px 18px rgba(0,0,0,0.7)",
-          background: "rgba(0,0,0,0.4)",
-          padding: "12px 24px",
-          borderRadius: 16,
+          background: "rgba(0, 0, 0, 0.6)",
+          padding: "10px 20px",
+          borderRadius: "12px",
+          display: "inline-block",
+          marginBottom: "20px",
         }}
       >
-        {item || "— noch keines —"}
+        Aktuelles Item: <strong>{currentItem}</strong>
+      </div>
+
+      {/* Scoreboard */}
+      <div style={{ marginTop: "20px" }}>
+        {players.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              background: "rgba(0, 0, 0, 0.6)",
+              padding: "10px 20px",
+              borderRadius: "12px",
+              marginBottom: "10px",
+              display: "inline-block",
+            }}
+          >
+            {p.name}: <strong>{p.score}</strong> Punkte
+          </div>
+        ))}
       </div>
     </div>
   );
