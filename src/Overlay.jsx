@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db } from "./firebase";
 import { ref, onValue } from "firebase/database";
 
 export default function Overlay() {
