@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Overlay from "./Overlay.jsx";
+import Overlay from "./Overlay";
 
 const roomId = new URLSearchParams(window.location.search).get("room");
 
