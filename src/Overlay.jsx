@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 
@@ -9,7 +9,9 @@ export default function Overlay({ roomId }) {
     if (!roomId) return;
 
     const unsub = onSnapshot(doc(db, "rooms", roomId), (snap) => {
-      setRoom(snap.data());
+      if (snap.exists()) {
+        setRoom(snap.data());
+      }
     });
 
     return () => unsub();
@@ -20,42 +22,54 @@ export default function Overlay({ roomId }) {
   const currentItem = room.currentItem;
   const players = room.players || [];
 
+  /* ===== ZELDA STYLES ===== */
+
+  const containerStyle = {
+    color: "#f5e6a8",
+    fontFamily: '"Cinzel", serif',
+    padding: "20px",
+  };
+
+  const panelStyle = {
+    background: "rgba(0, 0, 0, 0.65)",
+    padding: "14px 30px",
+    borderRadius: "14px",
+    marginBottom: "18px",
+    display: "inline-block",
+  };
+
+  const itemTextStyle = {
+    fontSize: "40px",
+    fontWeight: 900,
+    letterSpacing: "2px",
+    textShadow: `
+      0 0 2px #000,
+      0 0 6px #000,
+      0 0 14px rgba(255, 215, 120, 0.7)
+    `,
+  };
+
+  const scoreTextStyle = {
+    fontSize: "26px",
+    fontWeight: 700,
+    letterSpacing: "1px",
+    textShadow: "0 0 6px rgba(0,0,0,0.8)",
+  };
+
   return (
-    <div
-      style={{
-        color: "white",
-        fontFamily: "'Cinzel', serif",
-        fontSize: "28px",
-        padding: "20px",
-      }}
-    >
+    <div style={containerStyle}>
       {/* Aktuelles Item */}
-      <div
-        style={{
-          background: "rgba(0,0,0,0.6)",
-          padding: "12px 24px",
-          borderRadius: "14px",
-          marginBottom: "20px",
-          display: "inline-block",
-        }}
-      >
-        Aktuelles Item: <strong>{currentItem}</strong>
+      <div style={panelStyle}>
+        <div style={itemTextStyle}>{currentItem}</div>
       </div>
 
-      {/* Punktestand */}
+      {/* Punkte */}
       <div>
         {players.map((p) => (
-          <div
-            key={p.id}
-            style={{
-              background: "rgba(0,0,0,0.6)",
-              padding: "10px 20px",
-              borderRadius: "14px",
-              marginBottom: "10px",
-              display: "inline-block",
-            }}
-          >
-            {p.name}: <strong>{p.score}</strong> Punkte
+          <div key={p.id} style={panelStyle}>
+            <span style={scoreTextStyle}>
+              {p.name}: {p.score}
+            </span>
           </div>
         ))}
       </div>
