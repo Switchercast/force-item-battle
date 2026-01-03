@@ -25,7 +25,7 @@ export default function Overlay({ roomId }) {
   /* ===== ZELDA STYLES ===== */
 
   const containerStyle = {
-    color: "#f5e6a8",
+    color: "#ffffffff",
     fontFamily: '"Cinzel", serif',
     padding: "20px",
   };
@@ -45,7 +45,7 @@ export default function Overlay({ roomId }) {
     textShadow: `
       0 0 2px #000,
       0 0 6px #000,
-      0 0 14px rgba(255, 215, 120, 0.7)
+      0 0 14px rgba(255, 255, 255, 0.7)
     `,
   };
 
