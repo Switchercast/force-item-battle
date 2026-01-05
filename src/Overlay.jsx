@@ -45,7 +45,7 @@ export default function Overlay({ roomId }) {
     textShadow: `
       0 0 2px #000,
       0 0 6px #000,
-      0 0 14px rgba(255, 255, 255, 0.7)
+      0 0 14px rgba(255, 255, 255, 1)
     `,
   };
 
